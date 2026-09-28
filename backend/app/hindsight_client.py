@@ -37,10 +37,10 @@ def _headers(api_key: str) -> dict[str, str]:
 
 
 def _endpoint(base_url: str, bank_id: str, operation: str) -> str:
-    if not base_url.strip():
+    if not base_url or not isinstance(base_url, str) or not base_url.strip():
         logger.error("Memory service configuration missing: HINDSIGHT_BASE_URL is not set.")
         raise HindsightServiceError("Memory service is not configured.")
-    if not bank_id.strip():
+    if not bank_id or not isinstance(bank_id, str) or not bank_id.strip():
         logger.error("Memory service configuration missing: HINDSIGHT_BANK_ID is not set.")
         raise HindsightServiceError("Memory service is not configured.")
     return f"{base_url.rstrip('/')}/v1/default/banks/{quote(bank_id, safe='')}/{operation}"

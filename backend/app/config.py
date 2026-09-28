@@ -21,7 +21,20 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins(self) -> list[str]:
-        return [origin.strip() for origin in self.frontend_origins.split(",") if origin.strip()]
+        origins = [origin.strip().rstrip('/') for origin in self.frontend_origins.split(",") if origin.strip()]
+        if "*" in origins:
+            return ["*"]
+        default_origins = [
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "http://localhost:4173",
+            "http://127.0.0.1:5173",
+            "http://127.0.0.1:3000",
+        ]
+        for default in default_origins:
+            if default not in origins:
+                origins.append(default)
+        return origins
 
 
 @lru_cache
